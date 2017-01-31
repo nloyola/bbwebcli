@@ -22,7 +22,10 @@
   },
   "homepage": "https://github.com/cbsrbiobank/bbwebcli#readme",
   "dependencies": {
-    "commander": "^2.9.0"
+    "request": "^2.79.0",
+    "yargs": "^6.6.0"
   },
-  "bin" : { "bbwebcli" : "bbwebcli.js" }
+  "bin": {
+    "bbwebcli": "bbwebcli.js"
+  }
 }

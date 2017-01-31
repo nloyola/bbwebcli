@@ -1,27 +1,16 @@
 #!/usr/bin/env node
 
-/* eslint-env es6 */
-/* eslint no-sync: "off" */
-/* eslint no-console: "off" */
-/* global process */
+// -*-:mode: js2-mode; -*-
 
-(function () {
-  'use strict';
+/* eslint no-unused-expressions: "off" */
 
-  const program = require('commander');
+const yargs = require('yargs'),
+      pjson   = require('./package.json');
 
-  const cliFunction = (req, optional) => {
-    console.log('command: %s', req);
-    if (optional) {
-      optional.forEach(function (opt) {
-        console.log('User passed optional arguments: %s', opt);
-      });
-    }
-  };
-
-  program
-    .version('0.0.1')
-    .command('study <command>', 'commands related to a study')
-    .parse(process.argv);
-
-})();
+yargs
+   .usage('$0 <command> [args]')
+   .version(() => pjson.version)
+   .commandDir('commands')
+   .help('help')
+   .alias('h', 'help')
+   .argv;
