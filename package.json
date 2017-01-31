@@ -1,0 +1,28 @@
+{
+  "name": "bbwebcli",
+  "version": "0.0.1",
+  "description": "Command line interface to Biobank Server using it's REST API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cbsrbiobank/bbwebcli.git"
+  },
+  "keywords": [
+    "command",
+    "line",
+    "application"
+  ],
+  "author": "Canadian Biosample Repository",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cbsrbiobank/bbwebcli/issues"
+  },
+  "homepage": "https://github.com/cbsrbiobank/bbwebcli#readme",
+  "dependencies": {
+    "commander": "^2.9.0"
+  },
+  "bin" : { "bbwebcli" : "bbwebcli.js" }
+}

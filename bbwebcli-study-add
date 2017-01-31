@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+/* -*-:mode: js2-mode */
+
+/* eslint-env es6 */
+/* eslint no-sync: "off" */
+/* eslint no-console: "off" */
+/* global process */
+
+
+const program = require('commander');
+
+program
+   .command('add <name> <description>', 'adds a study')
+   .parse(process.argv);
+
+console.log(program.args);
+
+//var command = program.args[0];
