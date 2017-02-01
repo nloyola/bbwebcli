@@ -4,8 +4,8 @@
 
 /* eslint no-unused-expressions: "off" */
 
-const yargs = require('yargs'),
-      pjson   = require('./package.json');
+const yargs  = require('yargs'),
+      pjson  = require('./package.json');
 
 yargs
    .usage('$0 <command> [args]')

@@ -1,11 +1,17 @@
 {
-  "plugins": [
-    "requirejs",
-    "jasmine"
-  ],
   "env": {
     "node": true,
     "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "semi": 2
   },
   "extends": "eslint:recommended",
   "rules": {
