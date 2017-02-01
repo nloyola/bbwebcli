@@ -5,7 +5,8 @@
 /* global process */
 
 const prompt = require('prompt'),
-      fs     = require('fs');
+      fs     = require('fs'),
+      chalk  = require('chalk');
 
 const configFilename = './config.json';
 
@@ -27,9 +28,6 @@ var promptSchema = {
       message: 'Invalid email address',
       required: true
     },
-    password: {
-      hidden: true
-    },
     saveConfigToFile: {
       type: 'boolean',
       default: true
@@ -37,25 +35,31 @@ var promptSchema = {
   }
 };
 
+var config;
+
 function readConfig() {
-  const config = fs.readFileSync(configFilename);
+  var rawConfig = fs.readFileSync(configFilename);
   try {
-    return JSON.parse(config);
+    config = JSON.parse(rawConfig);
   } catch (err) {
-    return {
+    config = {
       hostname: 'localhost',
       port: 9000
     };
   }
+  return config;
 }
 
-function writeConfig({ hostname, port, email}) {
+function writeConfig({ hostname, port, email, sessionToken = undefined}) {
   var config = {
     hostname: hostname,
     port:     port
   };
   if (email) {
     config.email = email;
+  }
+  if (sessionToken) {
+    config.sessionToken = sessionToken;
   }
   fs.writeFile(configFilename, JSON.stringify(config), function (err) {
     if (err) {
@@ -69,9 +73,14 @@ function onPromptErr(err) {
   return 1;
 }
 
-exports.getConnectionParams = function (onResultFn) {
-  var config = readConfig();
+/*
+ * Returns true if the configuration file is missing or if it does not contain an email setting.
+ */
+function areConnectionParamsRequired() {
+  return (config.email === undefined);
+}
 
+function promptConnectionParams(argv, onResultFn) {
   if (config.hostname) {
     promptSchema.properties.hostname.default = config.hostname;
   }
@@ -85,11 +94,60 @@ exports.getConnectionParams = function (onResultFn) {
   }
 
   prompt.start();
-  prompt.get(promptSchema, function (err, connParams) {
+  prompt.get(promptSchema, (err, connParams) => {
     if (err) { return onPromptErr(err); }
     if (connParams.saveConfigToFile) {
       writeConfig(connParams);
     }
     return onResultFn(connParams);
   });
+}
+
+exports.getConnectionParams = function (argv, onResultFn) {
+  config = readConfig();
+
+  if (areConnectionParamsRequired()) {
+    promptConnectionParams(argv, onResultFn);
+  } else {
+    onResultFn(config);
+  }
 };
+
+exports.showConnectionParams = function () {
+  if (!config) {
+    throw new Error('configuration not loaded yet!');
+  }
+
+  console.log('host URL:', chalk.green(getUrl(config)));
+  console.log('email:', chalk.blue(config.email));
+};
+
+exports.getPassword = function (onResultFn) {
+    const schema = {
+    properties: {
+      password: {
+        hidden: true
+      }
+    }
+  };
+
+  prompt.get(schema, (err, result) => {
+    if (err) { return onPromptErr(err); }
+    return onResultFn(result.password);
+  });
+
+};
+
+exports.writeSessionToken = function (token) {
+  var config = readConfig();
+  config.sessionToken = token;
+  writeConfig(config);
+};
+
+exports.getUrl = getUrl;
+
+function getUrl(connParams) {
+  var portStr = connParams.port.toString(),
+      scheme = portStr.includes('443') ? 'https': 'http';
+  return scheme + '://' + connParams.hostname + ':' + connParams.port + '/';
+}
