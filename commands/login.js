@@ -1,53 +1,57 @@
 #!/usr/bin/env node
 
-// -*-:mode: js2-mode; -*-
-
 /* eslint no-console: "off" */
 
-const fetch = require('node-fetch'),
-      lib = require('../lib'),
-      chalk  = require('chalk');
+const lib = require('../lib'),
+      chalk  = require('chalk'),
+      Command = require('../lib/Command');
 
-exports.command = 'login';
-exports.describe = 'Logs into the server and saves a session for subsequent commands.';
-exports.builder = function() {};
-exports.handler = function(argv) {
-  if (argv._.length !== 1) {
-    console.log('Error: invalid arguments');
-    return;
+class LoginCommand extends Command {
+
+  constructor() {
+    super();
+    this.commandHelp = 'login';
+    this.description = 'Logs into the server and saves a session for subsequent commands.';
   }
 
-  lib.getConnectionParams(argv, doRequest);
-};
+  handleCommand(argv, connParams) {
+    if (argv._.length !== 1) {
+      console.log('Error: invalid arguments');
+      return;
+    }
 
-function doRequest(connParams) {
-  lib.showConnectionParams();
+    lib.getPassword((password) => {
+      var url;
 
-  lib.getPassword((password) => {
-    const credentials = {
-      email: connParams.email,
-      password: password
-    };
+      const credentials = {
+        email: connParams.email,
+        password: password
+      };
 
-    fetch(lib.getUrl(connParams) + 'users/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials)
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json) {
-            if (json.status === 'success') {
-              lib.writeSessionToken(json.data);
-              console.log(chalk.yellow('Login successful'));
-            } else  {
-              console.log(chalk.red('Error:', json.message));
-              lib.writeSessionToken('');
-            }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+      url = lib.getUrl(connParams) + 'users/login';
+      this.postRequest(url, credentials, (json) => this.handleJsonReply(json));
+    });
+  }
+
+  handleJsonReply(json) {
+    if (json.status === 'success') {
+      lib.writeSessionToken(json.data);
+      console.log(chalk.yellow('Login successful'));
+    } else  {
+      console.log(chalk.red('Error:', json.message));
+      lib.writeSessionToken('');
+    }
+  }
+
 }
+
+var command = new LoginCommand();
+
+exports.command  = command.commandHelp;
+exports.describe = command.description;
+exports.builder  = command.builder.bind(command);
+exports.handler  = command.handler.bind(command);
+
+/* Local Variables:  */
+/* mode: js2-mode    */
+/* End:              */

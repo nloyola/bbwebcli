@@ -11,9 +11,9 @@ yargs
   .usage('$0 <command> [args]')
   .version(() => pjson.version)
   .commandDir('commands')
-  .boolean('c')
-  .alias('c', '--config-from-file')
-  .describe('c', 'Load connection parameters from config.json')
+  .boolean('n')
+  .alias('n', '--new-connection')
+  .describe('n', 'Ignore config.json and prompt for new connection parameters.')
   .help('help')
   .alias('h', 'help')
   .argv;

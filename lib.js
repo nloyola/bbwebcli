@@ -1,11 +1,10 @@
-// -*-:mode: js2-mode; -*-
-
 /* eslint no-sync: "off" */
 /* eslint no-console: "off" */
 /* global process */
 
 const prompt = require('prompt'),
       fs     = require('fs'),
+      moment = require('moment'),
       chalk  = require('chalk');
 
 const configFilename = './config.json';
@@ -38,8 +37,9 @@ var promptSchema = {
 var config;
 
 function readConfig() {
-  var rawConfig = fs.readFileSync(configFilename);
+  var rawConfig;
   try {
+    rawConfig = fs.readFileSync(configFilename);
     config = JSON.parse(rawConfig);
   } catch (err) {
     config = {
@@ -104,7 +104,14 @@ function promptConnectionParams(argv, onResultFn) {
 }
 
 exports.getConnectionParams = function (argv, onResultFn) {
-  config = readConfig();
+  if (argv.n) {
+    config = {
+      hostname: 'localhost',
+      port: 9000
+    };
+  } else {
+    config = readConfig();
+  }
 
   if (areConnectionParamsRequired()) {
     promptConnectionParams(argv, onResultFn);
@@ -151,3 +158,11 @@ function getUrl(connParams) {
       scheme = portStr.includes('443') ? 'https': 'http';
   return scheme + '://' + connParams.hostname + ':' + connParams.port + '/';
 }
+
+exports.dateToDisplayString = function (date) {
+   return moment(date).local().format('YYYY-MM-DD');
+};
+
+/* Local Variables:  */
+/* mode: js2-mode    */
+/* End:              */
