@@ -35,11 +35,11 @@ class LoginCommand extends Command {
 
   handleJsonReply(json) {
     if (json.status === 'success') {
-      lib.writeSessionToken(json.data);
+      this.config.writeSessionToken(json.data);
       console.log(chalk.yellow('Login successful'));
     } else  {
       console.log(chalk.red('Error:', json.message));
-      lib.writeSessionToken('');
+      this.config.writeSessionToken('');
     }
   }
 

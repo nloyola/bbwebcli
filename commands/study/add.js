@@ -20,7 +20,7 @@ exports.handler = function(argv) {
   console.log('name: "%s"', name);
   console.log('description: "%s"', description);
 
-  lib.getConnectionParams(doRequest);
+  lib.getConfig(doRequest);
 };
 
 function doRequest(result) {

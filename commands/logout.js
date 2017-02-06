@@ -28,7 +28,7 @@ class LogoutCommand extends Command {
 
   handleJsonReply(json) {
     if (json.status === 'success') {
-      lib.writeSessionToken('');
+      this.config.writeSessionToken('');
       console.log(chalk.yellow('Logout successful'));
     } else  {
       console.error(chalk.red('Error:', json.message));
