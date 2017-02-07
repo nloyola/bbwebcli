@@ -5,7 +5,7 @@
 const _           = require('lodash'),
       sprintf     = require('sprintf-js').sprintf,
       querystring = require('querystring'),
-      lib         = require('../../lib'),
+      timeService = require('../../lib/timeService'),
       Command     = require('../../lib/Command');
 
 require('console.table');
@@ -50,9 +50,9 @@ class StudyListCommand extends Command {
     // accumulate data from the items in the paged result reply
     this.studies = this.studies.concat(_.map(json.data.items, function (study) {
       var attrs = _.pick(study, [ 'name', 'state', 'timeAdded', 'timeModified' ]);
-      attrs.timeAdded = lib.dateToDisplayString(attrs.timeAdded);
+      attrs.timeAdded = timeService.dateToDisplayString(attrs.timeAdded);
       if (attrs.timeModified) {
-        attrs.timeModified = lib.dateToDisplayString(attrs.timeModified);
+        attrs.timeModified = timeService.dateToDisplayString(attrs.timeModified);
       }
       return attrs;
     }));

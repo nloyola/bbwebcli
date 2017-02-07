@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// -*-:mode: js2-mode; -*-
-
 /* eslint no-console: "off" */
 
 const Command     = require('../../lib/Command');
