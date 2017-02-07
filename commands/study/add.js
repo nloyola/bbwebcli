@@ -4,9 +4,7 @@
 
 /* eslint no-console: "off" */
 
-const fetch = require('node-fetch'),
-      lib = require('../../lib'),
-      Command     = require('../../lib/Command');
+const Command     = require('../../lib/Command');
 
 class StudyAddCommand extends Command {
   constructor() {
@@ -18,14 +16,25 @@ class StudyAddCommand extends Command {
   }
 
   handleCommand() {
-  const { name, description = ''} = this.argv;
-  if ((this.argv.length < 1) || (this.argv.length > 2)) {
-    console.log('Error: invalid arguments');
-    return;
+    var json = {};
+
+    if ((this.argv.length < 1) || (this.argv.length > 2)) {
+      return Promise.resolve('Error: invalid arguments');
+    }
+
+    json.name = this.argv.name;
+    if (this.argv.description) {
+      json.description = this.argv.description;
+    }
+
+    return this.connection.postRequest('studies/', json)
+      .then((json) => this.handleJsonReply(json))
+      .catch((json) => console.log('Error:', json));
   }
 
-  console.log('name: "%s"', name);
-  console.log('description: "%s"', description);
+  handleJsonReply(json) {
+    console.log('Study', json.data.name, 'added');
+    return Promise.resolve('done');
   }
 
 }

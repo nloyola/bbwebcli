@@ -32,17 +32,17 @@ class StudyListCommand extends Command {
   }
 
   getPage(page = 1) {
-    var url,
-        opts = { sort: 'name',
-                page: page,
-                limit: 10
-              };
+    var opts = {
+      sort: 'name',
+      page: page,
+      limit: 10
+    };
 
     if (this.filter) {
       opts.filter = 'name:like:' + this.filter;
     }
 
-    url = sprintf('studies/?%s', querystring.stringify(opts));
+    const url = sprintf('studies/?%s', querystring.stringify(opts));
     return this.connection.getRequest(url).then((json) => this.handleJsonReply(json));
   }
 
