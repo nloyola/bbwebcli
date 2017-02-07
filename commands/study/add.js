@@ -5,25 +5,38 @@
 /* eslint no-console: "off" */
 
 const fetch = require('node-fetch'),
-      lib = require('../../lib');
+      lib = require('../../lib'),
+      Command     = require('../../lib/Command');
 
-exports.command = 'add <name> [description]';
-exports.describe = 'adds a study';
-exports.builder = function() {};
-exports.handler = function(argv) {
-  const { name, description = ''} = argv;
-  if ((argv.length < 1) || (argv.length > 2)) {
+class StudyAddCommand extends Command {
+  constructor() {
+    super();
+    this.commandHelp = 'add <name> [description]';
+    this.description = 'adds a study';
+
+    this.studies = [];
+  }
+
+  handleCommand() {
+  const { name, description = ''} = this.argv;
+  if ((this.argv.length < 1) || (this.argv.length > 2)) {
     console.log('Error: invalid arguments');
     return;
   }
 
   console.log('name: "%s"', name);
   console.log('description: "%s"', description);
+  }
 
-  lib.getConfig(doRequest);
-};
-
-function doRequest(result) {
-  console.log('prompt result: ', result);
-  return result;
 }
+
+var command = new StudyAddCommand();
+
+exports.command  = command.commandHelp;
+exports.describe = command.description;
+exports.builder  = () => command.builder();
+exports.handler  = (argv) => command.handler(argv);
+
+/* Local Variables:  */
+/* mode: js2-mode    */
+/* End:              */

@@ -2,8 +2,7 @@
 
 /* eslint no-console: "off" */
 
-const lib     = require('../lib'),
-      prompt  = require('prompt'),
+const prompt  = require('prompt'),
       chalk   = require('chalk'),
       Command = require('../lib/Command');
 
@@ -18,49 +17,38 @@ class LoginCommand extends Command {
   handleCommand() {
     if (this.argv._.length !== 1) {
       console.log('Error: invalid arguments');
-      return;
+      return Promise.resolve('Error: invalid arguments');
     }
 
-    this.getPassword((password) => {
-      const credentials = {
-        email: this.config.email,
-        password: password
-      };
+    const schema = { properties: { password: { hidden: true } } };
+    return prompt.getAsync(schema)
+      .then((result) => {
+        const credentials = {
+          email: this.config.email,
+          password: result.password
+        };
 
-      this.connection.postRequest('users/login', credentials, (json) => this.handleJsonReply(json));
-    });
+        return this.connection.postRequest('users/login', credentials);
+      })
+      .then((json) => this.handleJsonReply(json))
+      .catch(() => console.log('log in attempt failed with email', chalk.green(this.config.email)));
   }
 
   handleJsonReply(json) {
+    var token = '';
     this.connection.showConnectionParams();
 
     if (json.status === 'success') {
-      this.config.writeSessionToken(json.data);
-      console.log(chalk.yellow('Login successful'));
-    } else  {
-      console.log(chalk.red('Error:', json.message));
-      this.config.writeSessionToken('');
+      token = json.data;
     }
-  }
 
-  getPassword(onResultFn) {
-    const schema = {
-      properties: {
-        password: {
-          hidden: true
-        }
+    this.config.writeSessionToken(token).then(() => {
+      if (token) {
+        console.log(chalk.yellow('Login successful'));
+      } else {
+        console.log(chalk.red('Error:', json.message));
       }
-    };
-
-    prompt.get(schema, (err, result) => {
-      if (err) { return onPromptErr(err); }
-      return onResultFn(result.password);
     });
-
-    function onPromptErr(err) {
-      console.log(err);
-      return 1;
-    }
   }
 
 }

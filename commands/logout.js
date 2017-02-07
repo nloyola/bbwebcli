@@ -3,7 +3,6 @@
 /* eslint no-console: "off" */
 
 const chalk   = require('chalk'),
-      lib     = require('../lib'),
       Command = require('../lib/Command');
 
 class LogoutCommand extends Command {
@@ -16,22 +15,26 @@ class LogoutCommand extends Command {
 
   handleCommand() {
     if (this.argv._.length !== 1) {
-      console.log('Error: invalid arguments');
-      return;
+      return Promise.resolve('Error: invalid arguments');
     }
 
-    this.connection.postRequest('users/logout', null, (json) => this.handleJsonReply(json));
+    return this.connection.postRequest('users/logout', null)
+      .then((json) => this.handleJsonReply(json))
+      .catch((err) => {
+        console.log(err);
+        console.log('logout attempt failed');
+      });
   }
 
   handleJsonReply(json) {
     this.connection.showConnectionParams();
 
     if (json.status === 'success') {
-      this.config.writeSessionToken('');
-      console.log(chalk.yellow('Logout successful'));
-    } else  {
-      console.error(chalk.red('Error:', json.message));
+      return this.config.writeSessionToken('')
+        .then(() => console.log(chalk.yellow('Logout successful')));
     }
+
+    return Promise.reject(json.message);
   }
 }
 

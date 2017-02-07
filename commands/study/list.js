@@ -22,29 +22,28 @@ class StudyListCommand extends Command {
 
   handleCommand() {
     if (this.argv._.length > 2) {
-      console.log('Error: invalid arguments');
-      return;
+      return Promise.resolve('Error: invalid arguments');
     }
 
     if (this.argv.filter) {
       this.filter = this.argv.filter;
     }
-    this.getPage();
+    return this.getPage();
   }
 
   getPage(page = 1) {
-    var obj = { sort: 'name',
+    var url,
+        opts = { sort: 'name',
                 page: page,
                 limit: 10
-              },
-        url;
+              };
 
     if (this.filter) {
-      obj.filter = 'name:like:' + this.filter;
+      opts.filter = 'name:like:' + this.filter;
     }
 
-    url = sprintf('studies/?%s', querystring.stringify(obj));
-    this.connection.getRequest(url, (json) => this.handleJsonReply(json));
+    url = sprintf('studies/?%s', querystring.stringify(opts));
+    return this.connection.getRequest(url).then((json) => this.handleJsonReply(json));
   }
 
   handleJsonReply(json) {
@@ -59,7 +58,8 @@ class StudyListCommand extends Command {
     }));
 
     if (json.data.next) {
-      this.getPage(json.data.next);
+      // get the next page
+      return this.getPage(json.data.next);
     } else {
       var tableHeading = '\nStudies';
 
@@ -69,6 +69,7 @@ class StudyListCommand extends Command {
 
       this.connection.showConnectionParams();
       console.table(tableHeading, this.studies);
+      return Promise.resolve('done');
     }
   }
 
