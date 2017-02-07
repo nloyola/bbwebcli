@@ -2,8 +2,9 @@
 
 /* eslint no-console: "off" */
 
-const lib = require('../lib'),
-      chalk  = require('chalk'),
+const lib     = require('../lib'),
+      prompt  = require('prompt'),
+      chalk   = require('chalk'),
       Command = require('../lib/Command');
 
 class LoginCommand extends Command {
@@ -14,26 +15,25 @@ class LoginCommand extends Command {
     this.description = 'Logs into the server and saves a session for subsequent commands.';
   }
 
-  handleCommand(argv, connParams) {
-    if (argv._.length !== 1) {
+  handleCommand() {
+    if (this.argv._.length !== 1) {
       console.log('Error: invalid arguments');
       return;
     }
 
-    lib.getPassword((password) => {
-      var url;
-
+    this.getPassword((password) => {
       const credentials = {
-        email: connParams.email,
+        email: this.config.email,
         password: password
       };
 
-      url = lib.getUrl(connParams) + 'users/login';
-      this.postRequest(url, credentials, (json) => this.handleJsonReply(json));
+      this.connection.postRequest('users/login', credentials, (json) => this.handleJsonReply(json));
     });
   }
 
   handleJsonReply(json) {
+    this.connection.showConnectionParams();
+
     if (json.status === 'success') {
       this.config.writeSessionToken(json.data);
       console.log(chalk.yellow('Login successful'));
@@ -43,14 +43,34 @@ class LoginCommand extends Command {
     }
   }
 
+  getPassword(onResultFn) {
+    const schema = {
+      properties: {
+        password: {
+          hidden: true
+        }
+      }
+    };
+
+    prompt.get(schema, (err, result) => {
+      if (err) { return onPromptErr(err); }
+      return onResultFn(result.password);
+    });
+
+    function onPromptErr(err) {
+      console.log(err);
+      return 1;
+    }
+  }
+
 }
 
 var command = new LoginCommand();
 
 exports.command  = command.commandHelp;
 exports.describe = command.description;
-exports.builder  = command.builder.bind(command);
-exports.handler  = command.handler.bind(command);
+exports.builder  = () => command.builder();
+exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */
 /* mode: js2-mode    */

@@ -20,32 +20,31 @@ class StudyListCommand extends Command {
     this.studies = [];
   }
 
-  handleCommand(argv, connParams) {
-    if (argv.length > 2) {
+  handleCommand() {
+    if (this.argv._.length > 2) {
       console.log('Error: invalid arguments');
       return;
     }
 
-    this.filter = this.argv.filter;
-    console.log('filter: "%s"', this.filter);
-
-    this.baseUrl = lib.getUrl(connParams) + 'studies/';
-    this.getPage({ filter: this.filter });
+    if (this.argv.filter) {
+      this.filter = this.argv.filter;
+    }
+    this.getPage();
   }
 
-  getPage({ filter = '', sort = 'name', page = 1, limit = 10}) {
-    var obj = { sort: sort,
+  getPage(page = 1) {
+    var obj = { sort: 'name',
                 page: page,
-                limit: limit
+                limit: 10
               },
         url;
 
-    if (filter.length > 0) {
-      obj.filter = 'name:like:' + filter;
+    if (this.filter) {
+      obj.filter = 'name:like:' + this.filter;
     }
 
-    url = sprintf('%s?%s', this.baseUrl, querystring.stringify(obj));
-    this.getRequest(url, (json) => this.handleJsonReply(json));
+    url = sprintf('studies/?%s', querystring.stringify(obj));
+    this.connection.getRequest(url, (json) => this.handleJsonReply(json));
   }
 
   handleJsonReply(json) {
@@ -60,10 +59,16 @@ class StudyListCommand extends Command {
     }));
 
     if (json.data.next) {
-      this.getPage({ filter: this.filter, page: json.data.next });
+      this.getPage(json.data.next);
     } else {
-      console.log('\nSTUDIES:\n');
-      console.table(this.studies);
+      var tableHeading = '\nStudies';
+
+      if (this.filter) {
+        tableHeading += ', name filter: ' + this.filter;
+      }
+
+      this.connection.showConnectionParams();
+      console.table(tableHeading, this.studies);
     }
   }
 
@@ -73,8 +78,8 @@ var command = new StudyListCommand();
 
 exports.command  = command.commandHelp;
 exports.describe = command.description;
-exports.builder  = command.builder.bind(command);
-exports.handler  = command.handler.bind(command);
+exports.builder  = () => command.builder();
+exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */
 /* mode: js2-mode    */
