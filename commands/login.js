@@ -36,7 +36,6 @@ class LoginCommand extends Command {
 
   handleJsonReply(json) {
     var token = '';
-    this.connection.showConnectionParams();
 
     if (json.status === 'success') {
       token = json.data;
@@ -49,6 +48,7 @@ class LoginCommand extends Command {
         console.log(chalk.red('Error:', json.message));
       }
     });
+    return null;
   }
 
 }
@@ -61,5 +61,5 @@ exports.builder  = () => command.builder();
 exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */
-/* mode: js2-mode    */
+/* mode: js2    */
 /* End:              */

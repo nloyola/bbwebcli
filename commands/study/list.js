@@ -67,7 +67,6 @@ class StudyListCommand extends Command {
         tableHeading += ', name filter: ' + this.filter;
       }
 
-      this.connection.showConnectionParams();
       console.table(tableHeading, this.studies);
       return Promise.resolve('done');
     }
@@ -83,5 +82,5 @@ exports.builder  = () => command.builder();
 exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */
-/* mode: js2-mode    */
+/* mode: js2    */
 /* End:              */

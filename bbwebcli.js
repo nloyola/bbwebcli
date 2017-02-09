@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// -*-:mode: js2-mode; -*-
+// -*-:mode: js2; -*-
 
 /* eslint no-unused-expressions: "off" */
 

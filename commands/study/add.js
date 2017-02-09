@@ -27,12 +27,12 @@ class StudyAddCommand extends Command {
 
     return this.connection.postRequest('studies/', json)
       .then((json) => this.handleJsonReply(json))
-      .catch((json) => console.log('Error:', json));
+      .catch((json) => console.log('Error:', json.message));
   }
 
   handleJsonReply(json) {
     console.log('Study', json.data.name, 'added');
-    return Promise.resolve('done');
+    return null;
   }
 
 }
@@ -45,5 +45,5 @@ exports.builder  = () => command.builder();
 exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */
-/* mode: js2-mode    */
+/* mode: js2    */
 /* End:              */

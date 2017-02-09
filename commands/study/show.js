@@ -19,8 +19,7 @@ class StudyShowCommand extends Command {
     }
 
     return this.connection.getRequest('studies/?filter=name::' + this.argv.name)
-      .then((json) => this.studyResponse(json))
-      .catch((json) => console.log('Error:', json));
+      .then((json) => this.studyResponse(json));
   }
 
   studyResponse(json) {
@@ -51,7 +50,6 @@ class StudyShowCommand extends Command {
         console.table(['Attribute', 'Value'], annotTypeData);
       }
     }
-    return Promise.resolve('done');
   }
 
 }
@@ -64,5 +62,5 @@ exports.builder  = () => command.builder();
 exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */
-/* mode: js2-mode    */
+/* mode: js2         */
 /* End:              */

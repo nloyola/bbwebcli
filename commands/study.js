@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// -*-:mode: js2-mode; -*-
+// -*-:mode: js2; -*-
 
 exports.command = 'study <command>';
 exports.describe = 'Commands related to studies.';

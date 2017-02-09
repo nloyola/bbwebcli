@@ -1,13 +1,13 @@
 {
   "ecmaVersion": 6,
   "libs": [
-    "underscore"
   ],
   "loadEagerly": [
     "commands/**/*.js",
     "lib/**/*.js"
   ],
   "plugins": {
-    "node": {}
+    "node": {},
+    "complete_strings": {},
   }
 }

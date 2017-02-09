@@ -19,16 +19,10 @@ class LogoutCommand extends Command {
     }
 
     return this.connection.postRequest('users/logout', null)
-      .then((json) => this.handleJsonReply(json))
-      .catch((err) => {
-        console.log(err);
-        console.log('logout attempt failed');
-      });
+      .then((json) => this.handleJsonReply(json));
   }
 
   handleJsonReply(json) {
-    this.connection.showConnectionParams();
-
     if (json.status === 'success') {
       return this.config.writeSessionToken('')
         .then(() => console.log(chalk.yellow('Logout successful')));
@@ -46,5 +40,5 @@ exports.builder  = () => command.builder();
 exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */
-/* mode: js2-mode    */
+/* mode: js2    */
 /* End:              */
