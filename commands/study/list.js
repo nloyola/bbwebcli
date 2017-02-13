@@ -2,11 +2,12 @@
 
 /* eslint no-console: "off" */
 
-const _           = require('lodash'),
-      sprintf     = require('sprintf-js').sprintf,
-      querystring = require('querystring'),
-      timeService = require('../../lib/timeService'),
-      Command     = require('../../lib/Command');
+const _            = require('lodash'),
+      sprintf      = require('sprintf-js').sprintf,
+      querystring  = require('querystring'),
+      timeService  = require('../../lib/timeService'),
+      Command      = require('../../lib/Command'),
+      CommandError = require('../../lib/errors/CommandError');
 
 require('console.table');
 
@@ -21,8 +22,8 @@ class StudyListCommand extends Command {
   }
 
   handleCommand() {
-    if (this.argv._.length > 2) {
-      return Promise.resolve('Error: invalid arguments');
+    if (this.argv._.length > 1) {
+      return Promise.reject(new CommandError('StudyListCommand', 'invalid arguments'));
     }
 
     if (this.argv.filter) {

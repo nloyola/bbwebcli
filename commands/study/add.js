@@ -2,7 +2,8 @@
 
 /* eslint no-console: "off" */
 
-const Command     = require('../../lib/Command');
+const Command      = require('../../lib/Command'),
+      CommandError = require('../../lib/errors/CommandError');
 
 class StudyAddCommand extends Command {
   constructor() {
@@ -16,8 +17,8 @@ class StudyAddCommand extends Command {
   handleCommand() {
     var json = {};
 
-    if ((this.argv.length < 1) || (this.argv.length > 2)) {
-      return Promise.resolve('Error: invalid arguments');
+    if (this.argv._.length > 1) {
+      return Promise.reject(new CommandError('StudyAddCommand', 'invalid arguments'));
     }
 
     json.name = this.argv.name;

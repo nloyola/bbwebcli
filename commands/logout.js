@@ -2,8 +2,9 @@
 
 /* eslint no-console: "off" */
 
-const chalk   = require('chalk'),
-      Command = require('../lib/Command');
+const chalk        = require('chalk'),
+      Command      = require('../lib/Command'),
+      CommandError = require('../lib/errors/CommandError');
 
 class LogoutCommand extends Command {
 
@@ -14,8 +15,8 @@ class LogoutCommand extends Command {
   }
 
   handleCommand() {
-    if (this.argv._.length !== 1) {
-      return Promise.resolve('Error: invalid arguments');
+    if (this.argv._.length > 1) {
+      return Promise.reject(new CommandError('LogoutCommand', 'invalid arguments'));
     }
 
     return this.connection.postRequest('users/logout', null)

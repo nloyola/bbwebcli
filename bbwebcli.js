@@ -3,10 +3,10 @@
 /* eslint no-unused-expressions: "off" */
 /* eslint no-process-env: "off" */
 
-const yargs = require('yargs'),
+const yargs   = require('yargs'),
       prompt  = require('prompt'),
-      pjson = require('./package.json'),
-      winston    = require('winston');
+      pjson   = require('./package.json'),
+      winston = require('winston');
 
 prompt.message = '';
 prompt.delimiter = '';

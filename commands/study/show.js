@@ -2,9 +2,10 @@
 
 /* eslint no-console: "off" */
 
-const _           = require('lodash'),
-      timeService = require('../../lib/timeService'),
-      Command     = require('../../lib/Command');
+const _            = require('lodash'),
+      timeService  = require('../../lib/timeService'),
+      Command      = require('../../lib/Command'),
+      CommandError = require('../../lib/errors/CommandError');
 
 class StudyShowCommand extends Command {
   constructor() {
@@ -14,8 +15,8 @@ class StudyShowCommand extends Command {
   }
 
   handleCommand() {
-    if (this.argv.length > 1) {
-      return Promise.resolve('Error: invalid arguments');
+    if (this.argv._.length > 1) {
+      return Promise.reject(new CommandError('StudyShowCommand', 'invalid arguments'));
     }
 
     return this.connection.getRequest('studies/?filter=name::' + this.argv.name)

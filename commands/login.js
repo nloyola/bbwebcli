@@ -2,9 +2,10 @@
 
 /* eslint no-console: "off" */
 
-const prompt  = require('prompt'),
-      chalk   = require('chalk'),
-      Command = require('../lib/Command');
+const prompt       = require('prompt'),
+      chalk        = require('chalk'),
+      Command      = require('../lib/Command'),
+      CommandError = require('../lib/errors/CommandError');
 
 class LoginCommand extends Command {
 
@@ -15,9 +16,8 @@ class LoginCommand extends Command {
   }
 
   handleCommand() {
-    if (this.argv._.length !== 1) {
-      console.log('Error: invalid arguments');
-      return Promise.resolve('Error: invalid arguments');
+    if (this.argv._.length > 1) {
+      return Promise.reject(new CommandError('LoginCommand', 'invalid arguments'));
     }
 
     this.connection.showConnectionParams();
