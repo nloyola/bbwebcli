@@ -23,12 +23,10 @@ class StudyShowCommand extends Command {
   }
 
   studyResponse(json) {
-    debugger;
     if (json.data.items.length !== 1) {
       console.log('Study with name', this.argv.name, 'not found');
     } else {
       const study = json.data.items[0];
-      console.log(study);
       var data = [
         [ 'name', study.name ],
         [ 'state', study.state ],
@@ -41,15 +39,15 @@ class StudyShowCommand extends Command {
       if (study.timeModified) {
         data.push([ 'time modified', timeService.datetimeToDisplayString(study.timeModified) ]);
       }
-      console.table(['Attribute', 'Value'], data);
 
       if (study.annotationTypes) {
-        var annotTypeData = _.map(study.annotationTypes, function (annotationType) {
-          return [ 'name', annotationType.name ];
+        const annotTypeData = _.map(study.annotationTypes, function (annotationType, index) {
+          return [ 'annotation ' + (index + 1), annotationType.name ];
         });
-        console.log('Patient Annotations');
-        console.table(['Attribute', 'Value'], annotTypeData);
+        data = data.concat(annotTypeData);
       }
+      console.log('\nStudy Information\n');
+      console.table(['Attribute', 'Value'], data);
     }
   }
 
