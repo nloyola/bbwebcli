@@ -20,8 +20,15 @@ class LoginCommand extends Command {
       return Promise.resolve('Error: invalid arguments');
     }
 
-    const schema = { properties: { password: { hidden: true } } };
-    return prompt.getAsync(schema)
+    this.connection.showConnectionParams();
+
+    const promptProps = [{
+      name: 'password',
+      hidden: true,
+      message: 'Please enter your password:'
+    }];
+
+    return prompt.getAsync(promptProps)
       .then((result) => {
         const credentials = {
           email: this.config.email,

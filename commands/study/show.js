@@ -23,6 +23,7 @@ class StudyShowCommand extends Command {
   }
 
   studyResponse(json) {
+    debugger;
     if (json.data.items.length !== 1) {
       console.log('Study with name', this.argv.name, 'not found');
     } else {

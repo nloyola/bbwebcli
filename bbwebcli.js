@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 
-// -*-:mode: js2; -*-
-
 /* eslint no-unused-expressions: "off" */
+/* eslint no-process-env: "off" */
 
-const yargs  = require('yargs'),
-      pjson  = require('./package.json');
+const yargs = require('yargs'),
+      prompt  = require('prompt'),
+      pjson = require('./package.json'),
+      winston    = require('winston');
+
+prompt.message = '';
+prompt.delimiter = '';
+
+winston.level = process.env.LOG_LEVEL;
 
 yargs
   .usage('$0 <command> [args]')
@@ -17,3 +23,7 @@ yargs
   .help('help')
   .alias('h', 'help')
   .argv;
+
+/* Local Variables: */
+/* mode: js2        */
+/* End:             */
