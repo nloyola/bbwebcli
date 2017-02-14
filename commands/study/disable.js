@@ -4,23 +4,23 @@
 
 const StudyStateCommand = require('../../lib/StudyStateCommand');
 
-class StudyEnableCommand extends StudyStateCommand {
+class StudyDisableCommand extends StudyStateCommand {
 
   constructor() {
     super();
 
-    this.urlPart               = 'enable';
-    this.commandSuccessMessage = 'study was enabled';
-    this.commandFailureMessage = 'Error: only enabled studies can be enabled';
-    this.commandHelp = 'enable <name>';
-    this.description = 'Changes the state of a study to ENABLED.';
+    this.urlPart               = 'disable';
+    this.commandSuccessMessage = 'study was disabled';
+    this.commandFailureMessage = 'Error: only enabled studies can be disabled';
+    this.commandHelp           = 'disable <name>';
+    this.description           = 'Changes the state of a study to DISABLED.';
 
     this.studies = [];
   }
 
 }
 
-var command = new StudyEnableCommand();
+var command = new StudyDisableCommand();
 
 exports.command  = command.commandHelp;
 exports.describe = command.description;
