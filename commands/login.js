@@ -5,7 +5,8 @@
 const prompt       = require('prompt'),
       chalk        = require('chalk'),
       Command      = require('../lib/Command'),
-      CommandError = require('../lib/errors/CommandError');
+      CommandError = require('../lib/errors/CommandError'),
+      LoginError   = require('../lib/errors/LoginError');
 
 class LoginCommand extends Command {
 
@@ -38,24 +39,16 @@ class LoginCommand extends Command {
         return this.connection.postRequest('users/login', credentials);
       })
       .then((json) => this.handleJsonReply(json))
-      .catch(() => console.log('log in attempt failed with email', chalk.green(this.config.email)));
+      .catch(LoginError, () => {
+        console.log('log in attempt failed with email', chalk.green(this.config.email));
+        return null;
+      });
   }
 
-  handleJsonReply(json) {
-    var token = '';
-
-    if (json.status === 'success') {
-      token = json.data;
-    }
-
-    this.config.writeSessionToken(token).then(() => {
-      if (token) {
-        console.log(chalk.yellow('Login successful'));
-      } else {
-        console.log(chalk.red('Error:', json.message));
-      }
+  handleJsonReply(token) {
+    return this.config.writeSessionToken(token).then(() => {
+      console.log(chalk.yellow('Login successful'));
     });
-    return null;
   }
 
 }
