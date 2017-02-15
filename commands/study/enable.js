@@ -24,7 +24,7 @@ var command = new StudyEnableCommand();
 
 exports.command  = command.commandHelp;
 exports.describe = command.description;
-exports.builder  = () => command.builder();
+exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */

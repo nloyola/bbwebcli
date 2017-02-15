@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-// -*-:mode: js2; -*-
-
 exports.command = 'study <command>';
 exports.describe = 'Commands related to studies.';
-exports.builder = function (yargs) {
-   return yargs.commandDir('study');
-};
-exports.handler = function () {};
+exports.builder = (yargs) => yargs.commandDir('study');
+exports.handler = () => {};
+
+/* Local Variables:  */
+/* mode: js2         */
+/* End:              */

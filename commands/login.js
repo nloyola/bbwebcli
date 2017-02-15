@@ -16,6 +16,13 @@ class LoginCommand extends Command {
     this.description = 'Logs into the server and saves a session for subsequent commands.';
   }
 
+  builder(yargs) {
+    return yargs
+      .boolean('n')
+      .alias('n', '--new-connection')
+      .describe('n', 'Ignore config.json and prompt for new connection parameters.');
+  }
+
   handleCommand() {
     if (this.argv._.length > 1) {
       return Promise.reject(new CommandError('LoginCommand', 'invalid arguments'));
@@ -57,7 +64,7 @@ var command = new LoginCommand();
 
 exports.command  = command.commandHelp;
 exports.describe = command.description;
-exports.builder  = () => command.builder();
+exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */

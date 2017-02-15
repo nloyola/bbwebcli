@@ -8,6 +8,6 @@
   ],
   "plugins": {
     "node": {},
-    "complete_strings": {},
+    "complete_strings": {}
   }
 }

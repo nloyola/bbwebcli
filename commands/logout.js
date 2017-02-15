@@ -29,7 +29,7 @@ class LogoutCommand extends Command {
         .then(() => console.log(chalk.yellow('Logout successful')));
     }
 
-    return Promise.reject(json.message);
+    return Promise.reject(new CommandError('LogoutCommand', json.message));
   }
 }
 
@@ -37,7 +37,7 @@ var command = new LogoutCommand();
 
 exports.command  = command.commandHelp;
 exports.describe = command.description;
-exports.builder  = () => command.builder();
+exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */

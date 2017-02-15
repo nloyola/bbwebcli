@@ -47,9 +47,13 @@ class StudyListCommand extends Command {
     return this.connection.getRequest(url).then((json) => this.handleJsonReply(json));
   }
 
-  handleJsonReply(json) {
+  handleJsonReply(pagedResult) {
+    if (!pagedResult.data) {
+      return Promise.reject(new CommandError('StudyListCommand', 'no data in response'));
+    }
+
     // accumulate data from the items in the paged result reply
-    this.studies = this.studies.concat(_.map(json.data.items, function (study) {
+    this.studies = this.studies.concat(_.map(pagedResult.data.items, function (study) {
       var attrs = _.pick(study, [ 'name', 'state', 'timeAdded', 'timeModified' ]);
       attrs.timeAdded = timeService.dateToDisplayString(attrs.timeAdded);
       if (attrs.timeModified) {
@@ -58,9 +62,9 @@ class StudyListCommand extends Command {
       return attrs;
     }));
 
-    if (json.data.next) {
+    if (pagedResult.data.next) {
       // get the next page
-      return this.getPage(json.data.next);
+      return this.getPage(pagedResult.data.next);
     } else {
       var tableHeading = '\nStudies';
 
@@ -79,7 +83,7 @@ var command = new StudyListCommand();
 
 exports.command  = command.commandHelp;
 exports.describe = command.description;
-exports.builder  = () => command.builder();
+exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 
 /* Local Variables:  */
