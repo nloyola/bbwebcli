@@ -17,7 +17,6 @@ class StudyListCommand extends Command {
     super();
     this.commandHelp = 'list [filter]';
     this.description = 'Lists studies. A filter can be used to search.';
-
     this.studies = [];
   }
 

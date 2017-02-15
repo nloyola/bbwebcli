@@ -14,8 +14,6 @@ class StudyEnableCommand extends StudyStateCommand {
     this.commandFailureMessage = 'Error: only enabled studies can be enabled';
     this.commandHelp = 'enable <name>';
     this.description = 'Changes the state of a study to ENABLED.';
-
-    this.studies = [];
   }
 
 }

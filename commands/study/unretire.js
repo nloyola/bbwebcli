@@ -14,8 +14,6 @@ class StudyUnretireCommand extends StudyStateCommand {
     this.commandFailureMessage = 'Error: only unretired studies can be unretired';
     this.commandHelp           = 'unretire <name>';
     this.description           = 'Changes the state of a study to UNRETIRED.';
-
-    this.studies = [];
   }
 
 }

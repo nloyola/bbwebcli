@@ -14,8 +14,6 @@ class StudyRetireCommand extends StudyStateCommand {
     this.commandFailureMessage = 'Error: only retired studies can be retired';
     this.commandHelp           = 'retire <name>';
     this.description           = 'Changes the state of a study to RETIRED.';
-
-    this.studies = [];
   }
 
 }

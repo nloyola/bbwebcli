@@ -10,8 +10,6 @@ class StudyAddCommand extends Command {
     super();
     this.commandHelp = 'add <name> [description]';
     this.description = 'adds a study';
-
-    this.studies = [];
   }
 
   handleCommand() {

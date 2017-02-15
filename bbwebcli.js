@@ -19,6 +19,7 @@ yargs
   .commandDir('commands')
   .help('help')
   .alias('h', 'help')
+  .wrap(yargs.terminalWidth())
   .argv;
 
 /* Local Variables: */
