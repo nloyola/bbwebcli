@@ -5,11 +5,29 @@
 const Command      = require('../../lib/Command'),
       CommandError = require('../../lib/errors/CommandError');
 
+const COMMAND = 'add <name>';
+
+const DESCRIPTION = 'Adds a study.';
+
+const USAGE = `$0 study ${COMMAND}
+
+${DESCRIPTION}
+
+NAME is the name to assign to the study.`;
+
 class StudyAddCommand extends Command {
+
   constructor() {
-    super();
-    this.commandHelp = 'add <name> [description]';
-    this.description = 'adds a study';
+    super(USAGE);
+  }
+
+  builder(yargs) {
+    return super.builder(yargs)
+      .usage(USAGE)
+      .string('d')
+      .nargs('d', 1)
+      .alias('d', 'description')
+      .describe('d', 'the description for this specimen');
   }
 
   handleCommand() {
@@ -38,8 +56,8 @@ class StudyAddCommand extends Command {
 
 var command = new StudyAddCommand();
 
-exports.command  = command.commandHelp;
-exports.describe = command.description;
+exports.command  = COMMAND;
+exports.describe = DESCRIPTION;
 exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 

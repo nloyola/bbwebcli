@@ -7,11 +7,19 @@ const _            = require('lodash'),
       Command      = require('../../lib/Command'),
       CommandError = require('../../lib/errors/CommandError');
 
+const COMMAND = 'show <name>';
+
+const DESCRIPTION = 'Displays a study\'s settings.';
+
+const USAGE = `$0 study ${COMMAND}
+
+${DESCRIPTION}
+
+NAME is the name to assign to the study.`;
+
 class StudyShowCommand extends Command {
   constructor() {
-    super();
-    this.commandHelp = 'show <name>';
-    this.description = 'displays the settings for a study';
+    super(USAGE);
   }
 
   handleCommand() {
@@ -56,8 +64,8 @@ class StudyShowCommand extends Command {
 
 var command = new StudyShowCommand();
 
-exports.command  = command.commandHelp;
-exports.describe = command.description;
+exports.command  = COMMAND;
+exports.describe = DESCRIPTION;
 exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 

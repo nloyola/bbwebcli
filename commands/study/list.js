@@ -11,12 +11,20 @@ const _            = require('lodash'),
 
 require('console.table');
 
+const COMMAND = 'list [filter]';
+
+const DESCRIPTION = 'Lists studies.';
+
+const USAGE = `$0 study ${COMMAND}
+
+${DESCRIPTION}
+
+FILTER is an optional string that can be used to filter by study names.`;
+
 class StudyListCommand extends Command {
 
   constructor() {
-    super();
-    this.commandHelp = 'list [filter]';
-    this.description = 'Lists studies. A filter can be used to search.';
+    super(USAGE);
     this.studies = [];
   }
 
@@ -80,8 +88,8 @@ class StudyListCommand extends Command {
 
 var command = new StudyListCommand();
 
-exports.command  = command.commandHelp;
-exports.describe = command.description;
+exports.command  = COMMAND;
+exports.describe = DESCRIPTION;
 exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 

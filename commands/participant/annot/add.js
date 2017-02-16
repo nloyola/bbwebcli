@@ -2,14 +2,31 @@
 
 /* eslint no-console: "off" */
 
-const StudyAnnotAddCommand = require('../../lib/StudyAnnotAddCommand');
+const StudyAnnotAddCommand = require('../../../lib/StudyAnnotAddCommand');
+
+const COMMAND = 'add <name> <study>';
+
+const DESCRIPTION = 'Adds a participant annotation to a study.';
+
+const USAGE = `$0 cevent ${COMMAND}
+
+${DESCRIPTION}
+
+NAME is the name to assign to the annotation. STUDY is the name of the study the collection event
+belongs to. STUDY must already exist.`;
 
 class PannotAddCommand extends StudyAnnotAddCommand {
 
   constructor() {
-    super('studies/pannottype/');
-    this.commandHelp = 'add <study> <name> [description]';
-    this.description = 'adds a participant annotation to a study';
+    super(USAGE);
+  }
+
+  builder(yargs) {
+    return super.builder(yargs)
+      .string('d')
+      .nargs('d', 1)
+      .alias('d', 'description')
+      .describe('d', 'the description for this specimen');
   }
 
   handleStudyCommand(study) {
@@ -29,8 +46,8 @@ class PannotAddCommand extends StudyAnnotAddCommand {
 
 var command = new PannotAddCommand();
 
-exports.command  = command.commandHelp;
-exports.describe = command.description;
+exports.command  = COMMAND;
+exports.describe = DESCRIPTION;
 exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 

@@ -4,10 +4,20 @@
 
 const StudyStateCommand = require('../../lib/StudyStateCommand');
 
+const COMMAND = 'unretire <name>';
+
+const DESCRIPTION = 'Changes the state of a study to DISABLED.';
+
+const USAGE = `$0 study ${COMMAND}
+
+${DESCRIPTION}
+
+NAME is the name of the study.`;
+
 class StudyUnretireCommand extends StudyStateCommand {
 
   constructor() {
-    super();
+    super(USAGE);
 
     this.urlPart               = 'unretire';
     this.commandSuccessMessage = 'study was unretired and is now disabled';
@@ -20,8 +30,8 @@ class StudyUnretireCommand extends StudyStateCommand {
 
 var command = new StudyUnretireCommand();
 
-exports.command  = command.commandHelp;
-exports.describe = command.description;
+exports.command  = COMMAND;
+exports.describe = DESCRIPTION;
 exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 

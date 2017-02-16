@@ -4,17 +4,31 @@
 
 const StudyCommand = require('../../lib/StudyCommand');
 
+const COMMAND = 'add <name> <study>';
+
+const DESCRIPTION = 'Adds a collection event to a study.';
+
+const USAGE = `$0 cevent ${COMMAND}
+
+${DESCRIPTION}
+
+NAME is the name to assign to the collection event. STUDY is the name of the study to add the
+collection event to`;
+
 class CeventAddCommand extends StudyCommand {
+
   constructor() {
-    super();
-    this.commandHelp = 'add <study> <name> [description]';
-    this.description = 'adds a collection event to a study';
+    super(USAGE);
   }
 
   builder(yargs) {
-    return yargs
+    return super.builder(yargs)
+      .string('d')
+      .nargs('d', 1)
+      .alias('d', 'description')
+      .describe('d', 'the description for this specimen')
       .boolean('r')
-      .alias('r', '--recurring')
+      .alias('r', 'recurring')
       .describe('r', 'If the collection event repeats');
   }
 
@@ -45,8 +59,8 @@ class CeventAddCommand extends StudyCommand {
 
 var command = new CeventAddCommand();
 
-exports.command  = command.commandHelp;
-exports.describe = command.description;
+exports.command  = COMMAND;
+exports.describe = DESCRIPTION;
 exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 

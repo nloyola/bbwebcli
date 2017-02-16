@@ -8,16 +8,22 @@ const prompt       = require('prompt'),
       CommandError = require('../lib/errors/CommandError'),
       LoginError   = require('../lib/errors/LoginError');
 
+const COMMAND = 'login';
+
+const DESCRIPTION = 'Logs into the server and saves a session for subsequent commands.';
+
+const USAGE = `$0 ${COMMAND}
+
+${DESCRIPTION}`;
+
 class LoginCommand extends Command {
 
   constructor() {
-    super();
-    this.commandHelp = 'login';
-    this.description = 'Logs into the server and saves a session for subsequent commands.';
+    super(USAGE);
   }
 
   builder(yargs) {
-    return yargs
+    return super.builder(yargs)
       .boolean('n')
       .alias('n', '--new-connection')
       .describe('n', 'Ignore config.json and prompt for new connection parameters.');
@@ -62,8 +68,8 @@ class LoginCommand extends Command {
 
 var command = new LoginCommand();
 
-exports.command  = command.commandHelp;
-exports.describe = command.description;
+exports.command  = COMMAND;
+exports.describe = DESCRIPTION;
 exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 

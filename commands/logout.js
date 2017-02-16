@@ -6,12 +6,18 @@ const chalk        = require('chalk'),
       Command      = require('../lib/Command'),
       CommandError = require('../lib/errors/CommandError');
 
+const COMMAND = 'logout';
+
+const DESCRIPTION = 'Logs out of the server and deletes the session.';
+
+const USAGE = `$0 ${COMMAND}
+
+${DESCRIPTION}`;
+
 class LogoutCommand extends Command {
 
   constructor() {
-    super();
-    this.commandHelp = 'logout';
-    this.description = 'Logs out of the server and deletes the session.';
+    super(USAGE);
   }
 
   handleCommand() {
@@ -35,8 +41,8 @@ class LogoutCommand extends Command {
 
 var command = new LogoutCommand();
 
-exports.command  = command.commandHelp;
-exports.describe = command.description;
+exports.command  = COMMAND;
+exports.describe = DESCRIPTION;
 exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 

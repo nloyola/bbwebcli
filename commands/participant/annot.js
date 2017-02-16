@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-exports.command = 'pannot <command>';
+exports.command = 'annot <subcommand>';
 exports.describe = 'Commands related to participant annotations.';
-exports.builder = (yargs) => yargs.commandDir('pannot');
+exports.builder = (yargs) => yargs.commandDir('annot');
 exports.handler = () => {};
 
-/* Local Variables:   */
+/* Local Variables:  */
 /* mode: js2         */
 /* End:              */

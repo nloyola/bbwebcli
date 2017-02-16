@@ -6,12 +6,30 @@ const _                    = require('lodash'),
       StudyAnnotAddCommand = require('../../../lib/StudyAnnotAddCommand'),
       CommandError         = require('../../../lib/errors/CommandError');
 
+const COMMAND = 'add <name> <cevent> <study>';
+
+const DESCRIPTION = 'Adds an annotation to a collection event.';
+
+const USAGE = `$0 cevent annot ${COMMAND}
+
+${DESCRIPTION}
+
+NAME is the name to assign to the annotation. CEVENT is the name of the collection event to add this
+annotation to. STUDY is the name of the study the collection event belongs to. CEVENT and STUDY must
+already exist.`;
+
 class CeventAddCommand extends StudyAnnotAddCommand {
 
   constructor() {
-    super();
-    this.commandHelp = 'add <study> <cevent> <name> [description]';
-    this.description = 'adds an annotation to a collection event';
+    super(USAGE);
+  }
+
+  builder(yargs) {
+    return super.builder(yargs)
+      .string('d')
+      .nargs('d', 1)
+      .alias('d', 'description')
+      .describe('d', 'the description for this specimen');
   }
 
   handleStudyCommand(study) {
@@ -44,8 +62,8 @@ class CeventAddCommand extends StudyAnnotAddCommand {
 
 var command = new CeventAddCommand();
 
-exports.command  = command.commandHelp;
-exports.describe = command.description;
+exports.command  = COMMAND;
+exports.describe = DESCRIPTION;
 exports.builder  = (yargs) => command.builder(yargs);
 exports.handler  = (argv) => command.handler(argv);
 
