@@ -7,15 +7,15 @@ const Command      = require('../../lib/Command'),
 
 const COMMAND = 'add <name>';
 
-const DESCRIPTION = 'Adds a study.';
+const DESCRIPTION = 'Adds a centre.';
 
-const USAGE = `$0 study ${COMMAND}
+const USAGE = `$0 centre ${COMMAND}
 
 ${DESCRIPTION}
 
-NAME is the name to assign to the study.`;
+NAME is the name to assign to the centre.`;
 
-class StudyAddCommand extends Command {
+class CentreAddCommand extends Command {
 
   constructor() {
     super(USAGE);
@@ -23,6 +23,7 @@ class StudyAddCommand extends Command {
 
   builder(yargs) {
     return super.builder(yargs)
+      .usage(USAGE)
       .string('d')
       .nargs('d', 1)
       .alias('d', 'description')
@@ -33,7 +34,7 @@ class StudyAddCommand extends Command {
     var json = {};
 
     if (this.argv._.length > 1) {
-      return Promise.reject(new CommandError('StudyAddCommand', 'invalid arguments'));
+      return Promise.reject(new CommandError('CentreAddCommand', 'invalid arguments'));
     }
 
     json.name = this.argv.name;
@@ -41,18 +42,18 @@ class StudyAddCommand extends Command {
       json.description = this.argv.description;
     }
 
-    return this.connection.postRequest('studies/', json)
+    return this.connection.postRequest('centres/', json)
       .then((json) => this.handleJsonReply(json))
       .catch((json) => console.log('Error:', json.message));
   }
 
   handleJsonReply(json) {
-    console.log('Study', json.data.name, 'added');
+    console.log('Centre', json.data.name, 'added');
   }
 
 }
 
-var command = new StudyAddCommand();
+var command = new CentreAddCommand();
 
 exports.command  = COMMAND;
 exports.describe = DESCRIPTION;

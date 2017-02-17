@@ -29,7 +29,7 @@ class CeventAddCommand extends StudyAnnotAddCommand {
       .string('d')
       .nargs('d', 1)
       .alias('d', 'description')
-      .describe('d', 'the description for this specimen');
+      .describe('d', 'the description for this annotation');
   }
 
   handleStudyCommand(study) {

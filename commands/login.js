@@ -30,7 +30,6 @@ class LoginCommand extends Command {
   }
 
   handleCommand() {
-    debugger;
     if (this.argv._.length > 1) {
       return Promise.reject(new CommandError('LoginCommand', 'invalid arguments'));
     }
@@ -55,7 +54,6 @@ class LoginCommand extends Command {
       .then((json) => this.handleJsonReply(json))
       .catch(LoginError, () => {
         console.log('log in attempt failed with email', chalk.green(this.config.email));
-        return null;
       });
   }
 

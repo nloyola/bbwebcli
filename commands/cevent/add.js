@@ -26,7 +26,7 @@ class CeventAddCommand extends StudyCommand {
       .string('d')
       .nargs('d', 1)
       .alias('d', 'description')
-      .describe('d', 'the description for this specimen')
+      .describe('d', 'the description for this collection event')
       .boolean('r')
       .alias('r', 'recurring')
       .describe('r', 'If the collection event repeats');
