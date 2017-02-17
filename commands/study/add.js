@@ -23,7 +23,6 @@ class StudyAddCommand extends Command {
 
   builder(yargs) {
     return super.builder(yargs)
-      .usage(USAGE)
       .string('d')
       .nargs('d', 1)
       .alias('d', 'description')

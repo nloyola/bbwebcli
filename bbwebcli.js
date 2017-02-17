@@ -8,6 +8,7 @@ const yargs   = require('yargs'),
       pjson   = require('./package.json'),
       winston = require('winston');
 
+// dont' like Prompt's default prompts, set them to blank instead
 prompt.message = '';
 prompt.delimiter = '';
 

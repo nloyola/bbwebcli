@@ -30,20 +30,21 @@ class LoginCommand extends Command {
   }
 
   handleCommand() {
+    debugger;
     if (this.argv._.length > 1) {
       return Promise.reject(new CommandError('LoginCommand', 'invalid arguments'));
     }
 
-    this.connection.showConnectionParams();
-
-    const promptProps = [{
+    const promptSchema = [{
       name: 'password',
       hidden: true,
       message: 'Please enter your password:'
     }];
 
-    return prompt.getAsync(promptProps)
+    return prompt.getAsync(promptSchema)
       .then((result) => {
+        this.connection.showConnectionParams();
+
         const credentials = {
           email: this.config.email,
           password: result.password
