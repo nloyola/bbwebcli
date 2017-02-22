@@ -28,12 +28,12 @@ class CentreParticipatesCommand extends CentreCommand {
 
   handleCommand() {
     this.centreName = this.argv.centre;
-    super.handleCommand();
+    return super.handleCommand();
   }
 
   handleCentreCommand() {
     return this.connection.getRequest('studies/?filter=name::' + this.argv.study)
-      .then((json) => this.studyResponse(json));
+      .then((pagedResult) => this.studyResponse(pagedResult));
   }
 
   studyResponse(pagedResult) {
@@ -54,8 +54,7 @@ class CentreParticipatesCommand extends CentreCommand {
     };
 
     return this.connection.postRequest('centres/studies/' + this.centre.id, json)
-      .then((json) => this.handleJsonReply(json))
-      .catch((json) => console.log('Error:', json.message));
+      .then((json) => this.handleJsonReply(json));
   }
 
   handleJsonReply() {
