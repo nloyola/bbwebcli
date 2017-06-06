@@ -164,7 +164,7 @@ class CeventSpecimenAddCommand extends CeventCommand {
       reqJson.description = this.argv.description;
     }
 
-    return this.connection.postRequest('studies/cetypes/spcspec/' + cevent.id, reqJson)
+    return this.connection.postRequest('studies/cetypes/spcdesc/' + cevent.id, reqJson)
       .then((json) => this.handleJsonReply(json));
   }
 
