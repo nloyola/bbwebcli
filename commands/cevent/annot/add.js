@@ -34,8 +34,8 @@ class CeventAddCommand extends StudyAnnotAddCommand {
 
   handleStudyCommand(study) {
     this.study = study;
-    return this.connection.getRequest('studies/cetypes/' + study.id)
-      .then((json) => this.handleCeventReply(json.data));
+    return this.connection.getRequest('studies/cetypes/' + study.id + '?filter=name::' + this.argv.cevent)
+      .then((json) => this.handleCeventReply(json.data.items));
   }
 
   handleCeventReply(cevents) {
