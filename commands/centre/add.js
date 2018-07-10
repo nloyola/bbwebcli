@@ -33,7 +33,7 @@ class CentreAddCommand extends Command {
   handleCommand() {
     var json = {};
 
-    if (this.argv._.length > 1) {
+    if (this.argv._.length > 2) {
       return Promise.reject(new CommandError('CentreAddCommand', 'invalid arguments'));
     }
 

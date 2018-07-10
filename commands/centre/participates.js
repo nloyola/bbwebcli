@@ -27,12 +27,16 @@ class CentreParticipatesCommand extends CentreCommand {
   }
 
   handleCommand() {
+    if (this.argv._.length > 2) {
+      return Promise.reject(new CommandError('CentreCommand', 'invalid arguments'));
+    }
+
     this.centreName = this.argv.centre;
     return super.handleCommand();
   }
 
   handleCentreCommand() {
-    return this.connection.getRequest('studies/?filter=name::' + this.argv.study)
+    return this.connection.getRequest('studies/search?filter=name::' + this.argv.study)
       .then((pagedResult) => this.studyResponse(pagedResult));
   }
 

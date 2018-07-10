@@ -32,7 +32,7 @@ class StudyAddCommand extends Command {
   handleCommand() {
     var json = {};
 
-    if (this.argv._.length > 1) {
+    if (this.argv._.length > 2) {
       return Promise.reject(new CommandError('StudyAddCommand', 'invalid arguments'));
     }
 
@@ -43,7 +43,7 @@ class StudyAddCommand extends Command {
 
     return this.connection.postRequest('studies/', json)
       .then((json) => this.handleJsonReply(json))
-      .catch((json) => console.log('Error:', json.message));
+      .catch((json) => console.log('Error:', json));
   }
 
   handleJsonReply(json) {

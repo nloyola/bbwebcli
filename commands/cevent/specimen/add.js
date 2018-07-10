@@ -2,8 +2,9 @@
 
 /* eslint no-console: "off" */
 
-const _             = require('lodash'),
-      CeventCommand = require('../../../lib/CeventCommand');
+const _             = require('lodash');
+const CeventCommand = require('../../../lib/CeventCommand');
+const CommandError         = require('../../../lib/errors/CommandError');
 
 const COMMAND = 'add <name> <cevent> <study>';
 
@@ -98,6 +99,9 @@ class CeventSpecimenAddCommand extends CeventCommand {
   }
 
   handleCommand() {
+    if (this.argv._.length > 3) {
+      return Promise.reject(new CommandError('StudyCommand', 'invalid arguments'));
+    }
     this.studyName = this.argv.study;
     return super.handleCommand();
   }
@@ -148,23 +152,23 @@ class CeventSpecimenAddCommand extends CeventCommand {
 
   handleCeventReply(cevent) {
     const reqJson = {
-      studyId:                     this.study.id,
-      expectedVersion:             cevent.version,
-      name:                        this.argv.name,
-      units:                       this.argv.units,
-      anatomicalSourceType:        this.argv.anatomicalSource,
-      preservationType:            this.argv.preservationType,
-      preservationTemperatureType: this.argv.preservationTemperature,
-      specimenType:                this.argv.specimenType,
-      maxCount:                    this.argv.count,
-      amount:                      this.argv.amount
+      studyId:                 this.study.id,
+      expectedVersion:         cevent.version,
+      name:                    this.argv.name,
+      units:                   this.argv.units,
+      anatomicalSourceType:    this.argv.anatomicalSource,
+      preservationType:        this.argv.preservationType,
+      preservationTemperature: this.argv.preservationTemperature,
+      specimenType:            this.argv.specimenType,
+      maxCount:                this.argv.count,
+      amount:                  this.argv.amount
     };
 
     if (this.argv.description) {
       reqJson.description = this.argv.description;
     }
 
-    return this.connection.postRequest('studies/cetypes/spcdesc/' + cevent.id, reqJson)
+    return this.connection.postRequest('studies/cetypes/spcdef/' + cevent.id, reqJson)
       .then((json) => this.handleJsonReply(json));
   }
 

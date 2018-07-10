@@ -2,6 +2,7 @@
 
 /* eslint no-console: "off" */
 
+const CommandError         = require('../../../lib/errors/CommandError');
 const StudyAnnotAddCommand = require('../../../lib/StudyAnnotAddCommand');
 
 const COMMAND = 'add <name> <study>';
@@ -27,6 +28,13 @@ class PannotAddCommand extends StudyAnnotAddCommand {
       .nargs('d', 1)
       .alias('d', 'description')
       .describe('d', 'the description for this specimen');
+  }
+
+  handleCommand() {
+    if (this.argv._.length > 3) {
+      return Promise.reject(new CommandError('PannotAddCommand', 'invalid arguments'));
+    }
+    return super.handleCommand();
   }
 
   handleStudyCommand(study) {

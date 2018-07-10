@@ -68,6 +68,10 @@ class CentreLocationCommand extends CentreCommand {
   }
 
   handleCommand() {
+    if (this.argv._.length > 2) {
+      return Promise.reject(new CommandError('CentreCommand', 'invalid arguments'));
+    }
+
     this.centreName = this.argv.centre;
     return super.handleCommand();
   }

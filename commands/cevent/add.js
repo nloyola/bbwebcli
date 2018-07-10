@@ -40,7 +40,7 @@ class CeventAddCommand extends StudyCommand {
   handleStudyCommand(study) {
     const reqJson = {
       name:      this.argv.name,
-      recurring: this.argv.recurring
+      recurring: this.argv.recurring || false
     };
 
     if (this.argv.description) {

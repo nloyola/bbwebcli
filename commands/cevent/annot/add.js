@@ -2,9 +2,9 @@
 
 /* eslint no-console: "off" */
 
-const _                    = require('lodash'),
-      StudyAnnotAddCommand = require('../../../lib/StudyAnnotAddCommand'),
-      CommandError         = require('../../../lib/errors/CommandError');
+const _                    = require('lodash');
+const StudyAnnotAddCommand = require('../../../lib/StudyAnnotAddCommand');
+const CommandError         = require('../../../lib/errors/CommandError');
 
 const COMMAND = 'add <name> <cevent> <study>';
 
@@ -32,9 +32,16 @@ class CeventAddCommand extends StudyAnnotAddCommand {
       .describe('d', 'the description for this annotation');
   }
 
+  handleCommand() {
+    if (this.argv._.length > 3) {
+      return Promise.reject(new CommandError('StudyCommand', 'invalid arguments'));
+    }
+    return super.handleCommand();
+  }
+
   handleStudyCommand(study) {
     this.study = study;
-    return this.connection.getRequest('studies/cetypes/' + study.id + '?filter=name::' + this.argv.cevent)
+    return this.connection.getRequest('studies/cetypes/' + study.slug + '?filter=name::' + this.argv.cevent)
       .then((json) => this.handleCeventReply(json.data.items));
   }
 
