@@ -26,16 +26,12 @@ class LogoutCommand extends Command {
     }
 
     return this.connection.postRequest('users/logout', null)
-      .then((json) => this.handleJsonReply(json));
+      .then(() => this.handleJsonReply());
   }
 
-  handleJsonReply(json) {
-    if (json.status === 'success') {
-      return this.config.writeSessionToken('')
-        .then(() => console.log(chalk.yellow('Logout successful')));
-    }
-
-    return Promise.reject(new CommandError('LogoutCommand', json.message));
+  handleJsonReply() {
+    return this.config.writeSessionToken('')
+      .then(() => console.log(chalk.yellow('Logout successful')));
   }
 }
 
